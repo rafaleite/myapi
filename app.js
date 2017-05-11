@@ -1,10 +1,19 @@
-var express = require('express');
-var app = express();
+var express = require('express'),
+    app = express(),
+    port = process.env.PORT || 3000,
+    mongoose = require('mongoose'),
+    Task = require('./models/todoModel'),
+    bodyParser = require('body-parser');
 
-app.get('/', function(req, res) {
-    res.send('Hello World');
-})
+mongoose.Promise = global.Promise;
+mongoose.connect('mongodb://192.168.1.4/Tododb');
 
-app.listen(3000, function() {
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
+
+var routes = require('./routes/todoRoutes');
+routes(app);
+
+app.listen(port, function() {
     console.log('Server start. Port: 3000')
 })
